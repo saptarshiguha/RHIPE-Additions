@@ -11,6 +11,9 @@ Merely a proof of concept.
 See airline-regresion.R for an example. Note, we use =contr.term= here, so
 /Intercept/ corresponds to day of week equal to 0 and hour of day equal to 0.
 
+This is approximately 2GB with 59MM rows. The original airline data set has
+123MM rows but I removed missing and any row with zero or negative delay.
+
 #+BEGIN_SRC R
 
 rs.add <- rhlm(arr.delay~dow+hod
@@ -55,5 +58,22 @@ hod23        19.66198549 0.32810199  59.9264443  0.000000e+00
 > attr(rs,"stats")
     sigmahat         r.sq           df            n 
 1.172748e+02 8.283200e-03 5.692781e+07 5.692798e+07 
+
+#+END_SRC R
+
+This is from a VoIP data set of 850MM rows and 14GV. /traffic.rate/ is a
+continuous variable and /rm.site/ is a factor with 27 levels. Since I'm not sure
+of the levels, /rhlm/ precomputes it.
+
+#+BEGIN_SRC R
+> rs2.int <- rhlm(jitter ~ traffic.rate*rm.site
+                ,data="/voip/modified.jitter.traffic.rate.database/"
+                ,type='map'
+                ,factor="rm.site" # will compute the levels of rm.site
+                ,transform=function(a){
+                  a$traffic.rate <- a$traffic.rate/1e6
+                  a
+                }
+                )
 
 #+END_SRC R
