@@ -8,7 +8,8 @@ Merely a proof of concept.
 
 * Example
 
-See airline-regresion.R for an example.
+See airline-regresion.R for an example. Note, we use =contr.term= here, so
+/Intercept/ corresponds to day of week equal to 0 and hour of day equal to 0.
 
 #+BEGIN_SRC R
 
