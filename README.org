@@ -14,6 +14,11 @@ See airline-regresion.R for an example. Note, we use =contr.term= here, so
 This is approximately 2GB with 59MM rows. The original airline data set has
 123MM rows but I removed missing and any row with zero or negative delay.
 
+Across a 72 core (7 task nodes, 2 with 4 cores, 4 with 8 and 2 with 16,
+dedicated namenode and jobtracker, Hadoop 0.20.2) cluster this took 1 1/2
+minutes.
+
+
 #+BEGIN_SRC R
 
 rs.add <- rhlm(arr.delay~dow+hod
@@ -63,7 +68,7 @@ hod23        19.66198549 0.32810199  59.9264443  0.000000e+00
 
 This is from a VoIP data set of 850MM rows and 14GV. /traffic.rate/ is a
 continuous variable and /rm.site/ is a factor with 27 levels. Since I'm not sure
-of the levels, /rhlm/ precomputes it.
+of the levels, /rhlm/ precomputes it. Across the cluster it took ~10 minutes.
 
 #+BEGIN_SRC R
 > rs2.int <- rhlm(jitter ~ traffic.rate*rm.site
