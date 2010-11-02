@@ -54,19 +54,18 @@ reduce <- expression(
     }
     ,post={ rhcollect(reduce.key, summ)}
     )
-z <- rhmr(map=map, reduce=reduce, combiner=TRUE, ifolder=inputfile, ofolder="/tmp/tof", inout=c("sequence","sequence")
-     ,mapred=list(rhipe_map_buff_size=5,mapred.max.split.size=67108864))
+z <- rhmr(map=map, reduce=reduce, combiner=TRUE
+          ,ifolder=inputfile
+          ,ofolder="/tmp/tof"
+          ,inout=c("sequence","sequence")
+          ,mapred=list(rhipe_map_buff_size=5,mapred.max.split.size=67108864))
 rhex(z)
-
 r <- rhread("/tmp/tof")
-cs <- cbind(do.call("rbind",lapply(r,"[[",1))
-      ,do.call("rbind",lapply(r,"[[",2)))
+cs <- cbind(
+            do.call("rbind",lapply(r,"[[",1))
+            ,do.call("rbind",lapply(r,"[[",2)))
 colnames(cs) <- c("dow","hod","n","ad")
 cs <- as.data.frame(cs)
 cs$adm <- cs$ad/cs$n
 cs <- cs[order(cs$hod,cs$dow),]
-
-aa <- cs[cs$hod==0 & cs$dow==0,]
-sum(aa$ad)/sum(aa$n)
-
 head(cs)

@@ -117,13 +117,13 @@ rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NU
   sigma.hat <- sqrt(RSS/df)
   stderr <- sqrt(diag(as.numeric(sigma.hat^2) * so.xpx))
   t.value <- betahat/stderr
+  
   t.pr <- pt(abs(t.value), df=df, lower.tail=FALSE)*2
-  r.square <- 1 - RSS/(ypy - nro*(ys/nro)^2)
-  attr(betahat,"stats") <-c(sigmahat=sigmahat, t.value=t.value, t.pr=t.pr, r.sq=r.square,df=df,n=nro)  
- 
-  attr(betahat,'bytes') <- z.result$counters$FileSystemCounters['HDFS_BYTES_READ']
+  r.square <- 1 - RSS/(others[2] - nro*(others[1]/nro)^2)
+  betahat <- data.frame(beta=betahat, t=t.value, t.pr=t.pr)
+  attr(betahat,"stats") <-c(sigmahat=sigma.hat, r.sq=r.square,df=as.numeric(df),n=as.numeric(nro))
   attr(betahat,'fac.levels') <- .faclevel
-  attr(betahat,"rhlm") <- z.result$counters$rhlm
+  attr(betahat,"counters") <- z.result$counters
   attr(betahat,"call") <- match.call()
   if(debug==1) attr(betahat,"proj") <- list(xpx=xpx,xpy=xpy,others=others)
   return(betahat)

@@ -2,3 +2,5 @@ Some additions to RHIPE for lm and glm.  No care has been taken to
 optimize the regression (e.g. full model matrices are sent, no zeroes
 are eliminated). Also no checks on numerical accuracy. 
 Merely a proof of concept.
+
+See airline-regresion.R for an example.
