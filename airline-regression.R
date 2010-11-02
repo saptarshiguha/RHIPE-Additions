@@ -1,6 +1,7 @@
 ##############################################
 ## Create A File with all subsets done for you
 ##############################################
+source("~/rhipe.lm.R")
 inputfile <- "/airline/airlinesubset"
 map <- expression({
     a <- do.call("rbind",map.values)
@@ -25,11 +26,17 @@ rhex(z)
 ## TRY rhlm
 ##############
 
-rs <- rhlm(arr.delay~dow*hod
+rs.int <- rhlm(arr.delay~dow*hod
            ,data=inputfile
            ,factor=list(list("dow",0:6), list("hod",0:23))
            ,mapred=list(rhipe_map_buff_size=10,mapred.max.split.size=67108864)
-           ,debug=1)
+           )
+
+rs.add <- rhlm(arr.delay~dow+hod
+           ,data=inputfile
+           ,factor=list(list("dow",0:6), list("hod",0:23))
+           ,mapred=list(rhipe_map_buff_size=10,mapred.max.split.size=67108864)
+           )
 
 
 ##############
