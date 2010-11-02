@@ -66,7 +66,7 @@ hod23        19.66198549 0.32810199  59.9264443  0.000000e+00
 
 #+END_SRC R
 
-This is from a VoIP data set of 850MM rows and 14GV. /traffic.rate/ is a
+This is from a VoIP data set of 850MM rows and 14GB. /traffic.rate/ is a
 continuous variable and /rm.site/ is a factor with 27 levels. Since I'm not sure
 of the levels, /rhlm/ precomputes it. Across the cluster it took ~10 minutes.
 
