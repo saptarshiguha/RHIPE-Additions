@@ -29,6 +29,7 @@ count.levels <- function(inputfolder,type='sequence',factors=NULL,converter=NULL
 
 rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NULL,mapred=NULL,drop.na=TRUE,debug=FALSE,...){
   ##specify empty list for no factors
+  m <- proc.time()[3]
   if(is.null(factors)) .faclevel <- factors else{
     .faclevel <- if(is.list(factors)) factors else{
       if(is.null(factors)) stop("Specify the names of the factors")
@@ -120,11 +121,12 @@ rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NU
   
   t.pr <- pt(abs(t.value), df=df, lower.tail=FALSE)*2
   r.square <- 1 - RSS/(others[2] - nro*(others[1]/nro)^2)
-  betahat <- data.frame(beta=betahat, t=t.value, t.pr=t.pr)
+  betahat <- data.frame(Estimate=betahat, "Std. Error"=stderr,"t value"=t.value, "Pr(>|t|)"=t.pr)
   attr(betahat,"stats") <-c(sigmahat=sigma.hat, r.sq=r.square,df=as.numeric(df),n=as.numeric(nro))
   attr(betahat,'fac.levels') <- .faclevel
   attr(betahat,"counters") <- z.result$counters
   attr(betahat,"call") <- match.call()
+  attr(betahat,"elapsed") <- proc.time()[3]-m
   if(debug==1) attr(betahat,"proj") <- list(xpx=xpx,xpy=xpy,others=others)
   return(betahat)
 }
