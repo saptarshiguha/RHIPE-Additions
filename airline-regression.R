@@ -38,7 +38,7 @@ rs.add <- rhlm(arr.delay~dow+hod
            ,mapred=list(rhipe_map_buff_size=10,mapred.max.split.size=67108864)
            )
 
-rs2.int <- rhlm(jitter ~ traffic.rate*rm.site
+rs2.int <- rhlm(jitter ~ traffic.rate+rm.site
                 ,data="/voip/modified.jitter.traffic.rate.database/"
                 ,type='map'
                 ,factor="rm.site"

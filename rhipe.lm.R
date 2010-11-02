@@ -98,7 +98,7 @@ rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NU
             ,ofolder=.tmp2
           ,shared=sprintf("/tmp/%s",.tmp)
           ,mapred=mapred
-          ,setup=list(map=setup),jobname=deparse(fml))
+          ,setup=list(map=setup),jobname=paste(deparse(fml),collapse=""))
   z.result=rhex(z)
   z.read <- rhread(.tmp2,type='sequence')
   which.is.xpx <- 
