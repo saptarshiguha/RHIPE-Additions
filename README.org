@@ -71,47 +71,47 @@ continuous variable and /rm.site/ is a factor with 27 levels. Since I'm not sure
 of the levels, /rhlm/ precomputes it. Across the cluster it took ~10 minutes.
 
 #+BEGIN_SRC R
-> rs2.int <- rhlm(jitter ~ traffic.rate*rm.site
+> rs2.int <- rhlm(jitter ~ traffic.rate+I(traffic.rate^2)+I)(traffic.rate^3+rm.site
                 ,data="/voip/modified.jitter.traffic.rate.database/"
                 ,type='map'
-                ,factor="rm.site" # will compute the levels of rm.site
+                ,factor="rm.site"
                 ,transform=function(a){
                   a$traffic.rate <- a$traffic.rate/1e6
                   a
                 }
                 )
-> 
-                                      Estimate   Std..Error      t.value      Pr...t..
-(Intercept)                        0.389124621 1.807061e-05 21533.560432  0.000000e+00
-traffic.rate                       0.006189257 2.396879e-06  2582.214744  0.000000e+00
-rm.siteSlough                      0.027872560 1.552152e-04   179.573660  0.000000e+00
-rm.siteBuenos Aires                0.110893009 1.128683e-04   982.498866  0.000000e+00
-rm.siteCopenhagen                  0.058072970 1.548732e-04   374.971151  0.000000e+00
-rm.siteAmsterdam                   0.049404560 1.301667e-04   379.548257  0.000000e+00
-rm.siteKansas City                 0.024296675 1.311675e-03    18.523400  1.337251e-76
-rm.siteNewark                     -0.041800246 3.190117e-05 -1310.304526  0.000000e+00
-rm.siteDenver                      0.089346919 6.653643e-04   134.282699  0.000000e+00
-rm.siteSacramento                 -0.051428651 1.447347e-04  -355.330462  0.000000e+00
-rm.siteFrankfurt                   0.033284972 1.044731e-04   318.598516  0.000000e+00
-rm.siteTampa                       0.057865410 7.964128e-05   726.575558  0.000000e+00
-rm.siteRochester                  -0.045405633 2.223516e-04  -204.206501  0.000000e+00
-rm.siteMilan                       0.079069505 1.784471e-04   443.097803  0.000000e+00
-rm.siteBrussels                   -0.060233316 1.781539e-03   -33.809701 1.420890e-250
-rm.siteAtlanta                    -0.031545048 8.346145e-05  -377.959523  0.000000e+00
-rm.siteZurich                      0.047836758 4.353317e-04   109.885763  0.000000e+00
-rm.siteSouthfield                 -0.016408165 1.027022e-03   -15.976443  1.864920e-57
-rm.siteParis                       0.025371382 1.934990e-04   131.118922  0.000000e+00
-rm.sitePhiladelphia               -0.067667213 7.641355e-05  -885.539454  0.000000e+00
-rm.siteBoston                      0.087465718 6.732497e-04   129.915727  0.000000e+00
-rm.siteDallas                      0.023534407 2.076432e-04   113.340589  0.000000e+00
-rm.siteChicago                     0.008290157 1.117608e-03     7.417768  1.191104e-13
-rm.siteWashington DC               0.023176831 1.090915e-04   212.453154  0.000000e+00
-rm.siteSeattle                    -0.042429705 1.803121e-04  -235.312634  0.000000e+00
-rm.siteAnaheim                    -0.043041135 5.462492e-05  -787.939592  0.000000e+00
-rm.siteIndianapolis               -0.044507486 1.829820e-03   -24.323421 1.108305e-130
-rm.siteDocklands                   0.009767609 6.745091e-05   144.810644  0.000000e+00
-traffic.rate:rm.siteSlough        -0.002599033 1.830570e-05  -141.979377  0.000000e+00
-traffic.rate:rm.siteBuenos Aires  -0.003410023 1.419663e-05  -240.199395  0.000000e+00
-traffic.rate:rm.siteCopenhagen    -0.003433620 1.819588e-05  -188.703177  0.000000e+00
-... # truncated
+
+> rs2.int
+                          Estimate   Std..Error     t.value     Pr...t..
+(Intercept)           3.303944e-01 7.421201e-05 4452.033981 0.000000e+00
+traffic.rate          7.545127e-03 3.940215e-05  191.490253 0.000000e+00
+I(traffic.rate^2)     1.099279e-04 6.390472e-06   17.201837 2.572496e-66
+I(traffic.rate^3)    -2.599681e-05 3.208562e-07  -81.023261 0.000000e+00
+rm.siteMilan          1.084781e-01 4.715206e-05 2300.602363 0.000000e+00
+rm.siteTampa          9.753336e-02 2.349133e-05 4151.887064 0.000000e+00
+rm.siteSlough         6.397481e-02 4.563022e-05 1402.027281 0.000000e+00
+rm.siteCopenhagen     8.709813e-02 4.354471e-05 2000.199833 0.000000e+00
+rm.siteBuenos Aires   1.403013e-01 2.969850e-05 4724.188126 0.000000e+00
+rm.siteAnaheim       -1.024560e-02 2.027993e-05 -505.208557 0.000000e+00
+rm.siteAmsterdam      7.453912e-02 3.414165e-05 2183.231038 0.000000e+00
+rm.siteKansas City    7.001764e-02 2.202731e-04  317.867494 0.000000e+00
+rm.siteBrussels       1.226566e-02 2.309235e-04   53.115666 0.000000e+00
+rm.siteSacramento    -1.065480e-02 4.069750e-05 -261.804721 0.000000e+00
+rm.siteFrankfurt      7.986056e-02 2.617881e-05 3050.580770 0.000000e+00
+rm.sitePhiladelphia  -1.944151e-04 2.457940e-05   -7.909676 2.580592e-15
+rm.siteIndianapolis   2.736086e-02 6.450638e-04   42.415742 0.000000e+00
+rm.siteSouthfield     5.257719e-02 2.097359e-04  250.682851 0.000000e+00
+rm.siteDenver         6.978296e-02 1.148105e-04  607.809977 0.000000e+00
+rm.siteRochester      3.051194e-02 5.571686e-05  547.624868 0.000000e+00
+rm.siteBoston         1.449916e-01 1.107167e-04 1309.572807 0.000000e+00
+rm.siteDallas         5.534420e-02 6.789292e-05  815.168941 0.000000e+00
+rm.siteZurich         7.821611e-02 1.054484e-04  741.747377 0.000000e+00
+rm.siteChicago        3.766479e-02 2.488500e-04  151.355383 0.000000e+00
+rm.sitePSTN           5.510437e-02 9.899227e-06 5566.532801 0.000000e+00
+rm.siteSeattle        2.577840e-02 5.004408e-05  515.113866 0.000000e+00
+rm.siteParis          5.831724e-02 5.456954e-05 1068.677558 0.000000e+00
+rm.siteAtlanta        4.792869e-02 2.570511e-05 1864.558610 0.000000e+00
+rm.siteWashington DC  5.903017e-02 3.285202e-05 1796.850326 0.000000e+00
+rm.siteDocklands      3.703563e-02 2.031110e-05 1823.418148 0.000000e+00
+... truncated ...
 #+END_SRC R
