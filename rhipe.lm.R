@@ -146,3 +146,29 @@ rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NU
 ## mf <- model.frame(jitter~traffic.rate*rm.site, data=b)
 ## xpx <-  (t(mm) %*% mm) 
 ## xpy <-  t(t(mm) %*% mf[,1])
+
+make.words <- function(N,dest,cols=5,p=5,factor=1,local=FALSE){
+  ## p is how long the word will be, longer more unique words
+  ## factor, if equal to 1, then exactly N rows, otherwise N*factor rows
+  ## cols how many columns per row
+  map <- as.expression(bquote({
+    P <- .(P)
+    COLS <- .(COLS)
+    F <- .(F)
+    lapply(map.values,function(r){
+      for(i in 1:F){
+        f <- sapply(1:COLS, function(n) paste(sample(letters,P ),collapse=""))
+        rhcollect(NULL,f)
+      }
+    })
+  },list(COLS=cols,P=p,F=factor)))
+  mapred <- list()
+  if (local) mapred$mapred.job.tracker <- 'local'
+  mapred[['mapred.field.separator']]=" "
+  mapred[['mapred.textoutputformat.usekey']]=FALSE
+  mapred$mapred.reduce.tasks=0
+  z <- rhmr(map=map, N=N,ofolder=dest,inout=c("lapp","text"),
+       mapred=mapred)
+  rhex(z)
+}
+## make.words(20e6,"/tmp/mywords",factor=100)
