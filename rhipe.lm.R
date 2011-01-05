@@ -63,8 +63,10 @@ rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NU
         mm <- model.matrix(.(FORMULA), data=a,contrasts.arg=if('model.matrix' %in% names(.(xtras))) .(xtras)$model.matrix else NULL)
         mf <- model.frame(.(FORMULA), data=a);
         mf1 <- mf[,1]
-        xpx <-  (t(mm) %*% mm) 
-        xpy <-  t(t(mm) %*% mf1)
+        xpx <-  crossprod(mm) ## (t(mm) %*% mm) , see "Least Squares
+                              ## Calculations in R", by Douglas Bates, R News,
+                              ## 2004 - http://cran.r-project.org/doc/Rnews/Rnews_2004-1.pdf
+        xpy <-  t(crossprod(mm, mf1) ## t(t(mm) %*% mf1)
         ypy <- sum(mf1 * mf1)    # sum of y^2
         ys <- sum(mf1)       # sum of y
         rhcollect(0L,xpx)
@@ -171,4 +173,34 @@ make.words <- function(N,dest,cols=5,p=5,factor=1,local=FALSE){
        mapred=mapred)
   rhex(z)
 }
-## make.words(20e6,"/tmp/mywords",factor=100)
+
+
+N <- 10000000
+filename <- sprintf("/tmp/%s",paste(sample(letters,6),collapse=""))
+make.words(N,filename,factor=10)
+
+map <- expression({
+  f <- table(unlist(strsplit(map.values," ")))
+  n <- names(f)
+  p <- as.numeric(f)
+  sapply(seq_along(n),function(r) rhcollect(n[r],p[r]))
+})
+reduce <- expression(
+    pre={ total <- 0},
+    reduce = { total <- total+sum(unlist(reduce.values)) }
+    post = { rhcollect(reduce.key,total) }
+    )
+z <- rhmr(map=map,reduce=reduce, inout=c("text","sequence")
+          ,ifolder=filename
+          ,ofolder=sprintf("%s-out",filename))
+job.result <- rhstatus(rhex(z,async=TRUE),mon.sec=2)
+if(job.result$status != "SUCCEEDED")
+  error("THE JOB DID NOT WORK")
+results <- rhread(sprintf("%s-out",filename))
+results <- data.frame(words=unlist(lapply(results,"[[",1)), count = =unlist(lapply(results,"[[",2)))
+message(sprintf("Did the job return the correct result? %s", sum(results[,2])== N*5))
+
+
+
+         
+         
