@@ -66,7 +66,7 @@ rhlm <- function(fml,data,type='sequence',factors=NULL,transform=NULL,compfac=NU
         xpx <-  crossprod(mm) ## (t(mm) %*% mm) , see "Least Squares
                               ## Calculations in R", by Douglas Bates, R News,
                               ## 2004 - http://cran.r-project.org/doc/Rnews/Rnews_2004-1.pdf
-        xpy <-  t(crossprod(mm, mf1) ## t(t(mm) %*% mf1)
+        xpy <-  t(crossprod(mm, mf1)) ## t(t(mm) %*% mf1)
         ypy <- sum(mf1 * mf1)    # sum of y^2
         ys <- sum(mf1)       # sum of y
         rhcollect(0L,xpx)
